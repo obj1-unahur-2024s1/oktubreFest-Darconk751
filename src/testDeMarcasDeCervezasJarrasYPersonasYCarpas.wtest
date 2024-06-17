@@ -1,0 +1,61 @@
+import marcasDeCerveza.*
+import personas.*
+import carpas.*
+
+describe "tests de marcas de cervezas y jarras"{
+	/*Marcas de cerveza */
+	const marcaHofbrau = new MarcaDeCervezaRubia(contenidoDeLupulo = 5, graduacionDeAlcohol = 0.08, precioPorLitroDeCerveza = 1000, paisDeDondeProvieneLaMarca = "Alemania")
+	const heineken = new MarcaDeCervezaRubia(contenidoDeLupulo = 1.5, graduacionDeAlcohol = 0.09, precioPorLitroDeCerveza = 1500, paisDeDondeProvieneLaMarca = "Alemania")
+	
+	/*jarras de cervezas */
+	
+	const jarra1 = new JarraDeCerveza(capacidadEnLitros = 0.5, marcaDeLaJarraDeCerveza =marcaHofbrau, paisDeProcedencia = "Alemania", carpa = carpa1)
+	const jarra2 = new JarraDeCerveza(capacidadEnLitros = 1, marcaDeLaJarraDeCerveza = heineken ,paisDeProcedencia = "Alemania", carpa = carpa1)
+	const jarra3 = new JarraDeCerveza(capacidadEnLitros = 1.5, marcaDeLaJarraDeCerveza = marcaHofbrau, paisDeProcedencia = "Belgica", carpa = carpa1)
+	
+	/*Personas */
+	
+	const persona1 = new Checo(leGustaLaMusicaTradicional = true, nivelDeAguante = 100, peso = 80, nacionalidad = "Republica Checa")
+	const persona2 = new Belga(leGustaLaMusicaTradicional = true, nivelDeAguante = 15, peso = 100, nacionalidad = "Belgica")
+	
+	/*Carpas */
+	
+	const carpa1 = new Carpa(limiteDePersonasQueAdmite = 40, marcaDeLaCervezaQueVende = heineken, tieneBandaParaTocarMusicaTradicional = true, recargo = recargoFijo)
+	
+	test "Comprobar el contenido de alcohol de la marca Hofbrau"{
+		assert.equals(0.04, jarra1.contenidoDeAlcohol())
+	}
+	test "Comprobar el total de alcohol que consumió la persona1"{
+		persona1.comprarJarraDeCerveza(jarra1)
+		persona1.comprarJarraDeCerveza(jarra2)
+		persona1.comprarJarraDeCerveza(jarra3)
+		
+		assert.equals(0.25, persona1.totalDeAlcoholQueTomo())
+	}
+	
+	test "Comprobar que persona1 no esta ebria al beber 3 jarras de cerveza pero persona2 si lo está"{
+		persona1.comprarJarraDeCerveza(jarra1)
+		persona1.comprarJarraDeCerveza(jarra2)
+		persona1.comprarJarraDeCerveza(jarra3)
+		
+		assert.notThat(persona1.estaEbria())
+		
+		persona2.comprarJarraDeCerveza(jarra1)
+		persona2.comprarJarraDeCerveza(jarra2)
+		persona2.comprarJarraDeCerveza(jarra3)
+		
+		assert.that(persona2.estaEbria())
+	}
+	test "Comprobar que persona1 le gusta la marca heineken y no la de Hofbrau y a la persona2 le gusta la marca de Hofbrau y no la heineken"{
+		assert.that(persona1.leGusta(heineken))
+		assert.notThat(persona1.leGusta(marcaHofbrau))
+		
+		assert.that(persona2.leGusta(marcaHofbrau))
+		assert.notThat(persona2.leGusta(heineken))
+	}
+	
+	test "Comprobar que persona1 no quiere entrar a carpa1 pero persona2 si quieren entrar a la carpa1"{
+		assert.that(persona2.quiereEntrarA(carpa1))
+		assert.notThat(persona1.quiereEntrarA(carpa1))
+	}
+}
